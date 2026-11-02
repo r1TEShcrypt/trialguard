@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+!.env.test.example
+coverage/
+*.log
+test-results/
+playwright-report/
+mysql-data/
+*.pem
+*.key
+*.pfx
+*.zip

@@ -1,0 +1,26 @@
+@import "tw-animate-css";
+@custom-variant dark (&:is([data-theme="dark"] *));
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--forest);
+  --color-primary-foreground: #edf3e8;
+  --color-secondary: var(--elevated);
+  --color-secondary-foreground: var(--text);
+  --color-muted: var(--elevated);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--elevated);
+  --color-accent-foreground: var(--text);
+  --color-destructive: var(--status-red);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--status-blue);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
