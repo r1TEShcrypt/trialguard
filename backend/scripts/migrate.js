@@ -1,7 +1,17 @@
 import { readdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
+import mysql from "mysql2/promise";
+import { config } from "../src/config.js";
 import { pool, query } from "../src/db.js";
 export async function migrate() {
+  // Create only a missing database; existing schemas and records are preserved.
+  if (!/^[a-zA-Z0-9_]+$/.test(config.db.database)) throw new Error("DB_NAME must contain only letters, numbers and underscores.");
+  const { database, ...serverConfig } = config.db;
+  const server = await mysql.createConnection(serverConfig);
+  try {
+    const [schemas] = await server.execute("SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME=?", [database]);
+    if (!schemas.length) await server.query("CREATE DATABASE IF NOT EXISTS " + mysql.escapeId(database) + " CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+  } finally { await server.end(); }
   const connection = await pool.getConnection();
   try {
     const [[lock]] = await connection.execute(
@@ -43,7 +53,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   try {
     await migrate();
   } catch (e) {
-    console.error("Migration failed:", e.message);
+    console.error("Migration failed:", e.code || "MIGRATION_ERROR", "Check local MySQL, backend/.env and schema compatibility. Existing tables are never reset.");
     process.exitCode = 1;
   } finally {
     await pool.end();

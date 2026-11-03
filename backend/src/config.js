@@ -1,5 +1,8 @@
 import dotenv from "dotenv";
-dotenv.config({ path: process.env.ENV_FILE || ".env", quiet: true });
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const backendDirectory = fileURLToPath(new URL("../", import.meta.url));
+dotenv.config({ path: process.env.ENV_FILE ? path.resolve(backendDirectory, process.env.ENV_FILE) : path.join(backendDirectory, ".env"), quiet: true });
 export const config = {
   env: process.env.NODE_ENV || "development",
   port: Number(process.env.PORT || 3001),
